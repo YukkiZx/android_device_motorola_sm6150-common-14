@@ -370,9 +370,9 @@ PRODUCT_PACKAGES += \
     libchrome.vendor
 
 # Moto hardware
-#PRODUCT_PACKAGES += \
-#    MotoActions \
-#    MotoCommonOverlay
+PRODUCT_PACKAGES += \
+    MotoActions \
+    MotoCommonOverlay
 
 # Net
 PRODUCT_PACKAGES += \
