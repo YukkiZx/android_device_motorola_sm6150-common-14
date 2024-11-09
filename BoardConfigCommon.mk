@@ -23,18 +23,18 @@ VENDOR_PATH := device/motorola/sm6150-common
 
 # Architecture
 TARGET_ARCH := arm64
-TARGET_ARCH_VARIANT := armv8-2a
+TARGET_ARCH_VARIANT := armv8-2a-dotprod
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
-TARGET_CPU_VARIANT := generic
+TARGET_CPU_VARIANT := cortex-a76
 TARGET_CPU_VARIANT_RUNTIME := cortex-a76
 
 TARGET_2ND_ARCH := arm
-TARGET_2ND_ARCH_VARIANT := armv8-a
+TARGET_2ND_ARCH_VARIANT := armv8-2a
 TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
-TARGET_2ND_CPU_VARIANT := generic
-TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a76
+TARGET_2ND_CPU_VARIANT := cortex-a55
+TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a55
 
 ENABLE_CPUSETS := true
 ENABLE_SCHEDBOOST := true
@@ -91,9 +91,12 @@ TARGET_MODULE_ALIASES += \
     wsa881x_dlkm.ko:audio_wsa881x.ko \
     wsa_macro_dlkm.ko:audio_wsa_macro.ko
 
-# Kernel modules - WLAN
-TARGET_MODULE_ALIASES += \
-    wlan.ko:qca_cld3_wlan.ko
+BOARD_KERNEL_CMDLINE += kpti=off
+BOARD_KERNEL_CMDLINE += quiet loglevel=3
+BOARD_KERNEL_CMDLINE += cgroup_disable=pressure
+BOARD_KERNEL_CMDLINE += cgroup.memory=nokmem,nosocket
+BOARD_KERNEL_CMDLINE += nodebugmon
+BOARD_KERNEL_CMDLINE += noirqdebug
 
 # Platform
 BOARD_USES_QCOM_HARDWARE := true
@@ -103,6 +106,16 @@ TARGET_BOARD_PLATFORM_GPU := qcom-adreno620
 
 # APEX
 DEXPREOPT_GENERATE_APEX_IMAGE := true
+
+# ART
+ART_BUILD_TARGET_NDEBUG := true
+ART_BUILD_TARGET_DEBUG := false
+ART_BUILD_HOST_NDEBUG := true
+ART_BUILD_HOST_DEBUG := false
+
+# Jemalloc
+MALLOC_SVELTE := true
+MALLOC_SVELTE_FOR_LIBC32 := true
 
 # Audio
 AUDIO_FEATURE_ENABLED_AAC_ADTS_OFFLOAD := true
@@ -205,6 +218,9 @@ endif
 TARGET_USERIMAGES_SPARSE_EXT_DISABLED := true
 TARGET_USERIMAGES_SPARSE_F2FS_DISABLED := true
 
+# HWUI
+HWUI_COMPILE_FOR_PERF := true
+
 # Recovery
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_INCLUDE_RECOVERY_DTBO := true
@@ -220,8 +236,8 @@ endif
 # RIL
 ENABLE_VENDOR_RIL_SERVICE := true
 
-# Security patch level
-VENDOR_SECURITY_PATCH := 2023-07-01
+# Security Patch Level
+VENDOR_SECURITY_PATCH := $(PLATFORM_SECURITY_PATCH)
 
 # SELinux
 TARGET_SEPOLICY_DIR := msmsteppe
